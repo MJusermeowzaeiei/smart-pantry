@@ -1,4 +1,4 @@
-import { sendPushNotification } from "@mmmike/web-push/send";
+import { buildPushPayload } from "@block65/webcrypto-web-push";
 
 const APP_ORIGIN_DEFAULT = "https://mjusermeowzaeiei.github.io";
 const JSON_HEADERS = { "content-type": "application/json; charset=utf-8" };
@@ -41,7 +41,13 @@ async function sendToUser(env, user, payload) {
   const remaining = [];
   for (const subscription of user.subscriptions) {
     try {
-      await sendPushNotification(subscription, payload, vapid, { ttl: 86400, urgency: "normal" });
+      const request = await buildPushPayload({ data: JSON.stringify(payload), options: { ttl: 86400, urgency: "normal" } }, subscription, vapid);
+      const result = await fetch(subscription.endpoint, request);
+      if (!result.ok) {
+        const error = new Error("Push service returned HTTP " + result.status);
+        error.statusCode = result.status;
+        throw error;
+      }
       remaining.push(subscription);
       sent++;
     } catch (error) {
