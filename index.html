@@ -22,40 +22,270 @@
 <div class="field"><label for="unit">หน่วย</label><select id="unit"><option>ชิ้น</option><option>ขวด</option><option>กล่อง</option><option>ถุง</option><option>แพ็ก</option><option>กิโลกรัม</option><option>กรัม</option><option>ลิตร</option><option>มิลลิลิตร</option><option>ฟอง</option><option>กระป๋อง</option><option>อื่น ๆ</option></select></div>
 <div class="field"><label for="expiry">วันหมดอายุ *</label><input id="expiry" type="date" required></div>
 <div class="field"><label for="note">หมายเหตุ (ไม่บังคับ)</label><input id="note" maxlength="250" placeholder="เช่น เปิดใช้แล้ว"></div></div><div class="actions"><button class="primary" type="submit" id="save-button">บันทึกวัตถุดิบ</button><button class="secondary" type="button" id="cancel-edit">ล้างฟอร์ม</button></div></form></div></section>
-<section id="inventory" class="page hidden"><div class="panel"><h2>📦 คลังวัตถุดิบ</h2><div class="toolbar"><input id="search" placeholder="ค้นหาชื่อวัตถุดิบ…"><select id="filter-category"><option value="">ทุกหมวดหมู่</option><option>ผักและผลไม้</option><option>เนื้อสัตว์/อาหารทะเล</option><option>นมและไข่</option><option>ของแห้ง</option><option>เครื่องปรุง</option><option>อาหารสำเร็จรูป</option><option>เครื่องดื่ม</option><option>อื่น ๆ</option></select><select id="sort"><option value="expiry">วันหมดอายุใกล้ที่สุด</option><option value="expiry-desc">วันหมดอายุไกลที่สุด</option><option value="name">ชื่อ ก–ฮ</option><option value="quantity">จำนวนมากไปน้อย</option></select></div><div id="inventory-list"></div></div></section>
+<section id="inventory" class="page hidden"><div class="panel"><h2>📦 คลังวัตถุดิบ</h2><div class="toolbar"><input id="search" placeholder="ค้นหาชื่อวัตถุดิบ…"><select id="filter-category"><option value="">ทุกหมวดหมู่</option><option>ผักและผลไม้</option><option>เนื้อสัตว์/อาหารทะเล</option><option>นมและไข่</option><option>ของแห้ง</option><option>เครื่องปรุง</option><option>อาหารสำเร็จรูป</option><option>เครื่องดื่ม</option><option>อื่น ๆ</option></select><select id="sort"><option value="expiry">วันหมดอายุใกล้ที่สุด</option><option value="expiry-desc">วันหมดอายุไกลที่สุด</option><option value="name">ชื่อ ก–ฮ</option><option value="quantity">จำนวนมากไปน้อย</option></select></div><div class="actions" style="margin:0 0 16px">
+<button class="secondary" type="button" id="export-data">ส่งออกข้อมูลสำรอง</button>
+<button class="secondary" type="button" id="import-data-button">นำเข้าข้อมูลสำรอง</button>
+<button class="danger" type="button" id="clear-all">ล้างคลังทั้งหมด</button>
+<input id="import-data-file" type="file" accept="application/json,.json" hidden>
+</div><p class="muted">ควรส่งออกข้อมูลสำรองก่อนเปลี่ยนอุปกรณ์หรือล้างข้อมูลเว็บไซต์</p><div id="inventory-list"></div></div></section>
 <section id="urgent" class="page hidden"><div class="panel"><h2>🚨 ควรใช้ก่อน</h2><p class="muted">รายการที่หมดอายุแล้วหรือจะหมดอายุภายใน 3 วัน</p><div id="urgent-list"></div></div></section>
 <section id="about" class="page hidden"><div class="panel"><h2>🎓 เกี่ยวกับโครงงาน</h2><p>Smart Pantry เป็นเว็บแอปสำหรับจัดการวัตถุดิบในบ้านและช่วยวางแผนใช้ก่อนหมดอายุ ข้อมูลจะเก็บไว้ในเบราว์เซอร์ของอุปกรณ์นี้</p><h3>แนวคิดวิยุตคณิตและอัลกอริทึม</h3><ul><li><b>เซต:</b> คลังวัตถุดิบคือเซตของระเบียนข้อมูลแต่ละรายการ</li><li><b>ตรรกศาสตร์:</b> ใช้เงื่อนไขแยกสถานะตามจำนวนวันคงเหลือ</li><li><b>ฟังก์ชัน:</b> daysLeft(x) = วันหมดอายุ(x) − วันที่ปัจจุบัน</li><li><b>การเรียงลำดับ:</b> เรียงวันหมดอายุจากน้อยไปมาก เพื่อแนะนำสิ่งที่ควรใช้ก่อน</li><li><b>การค้นหา:</b> กรองตามชื่อและหมวดหมู่</li></ul><pre>ถ้าวันคงเหลือ &lt; 0   → หมดอายุแล้ว
 ถ้าวันคงเหลือ ≤ 3   → ใกล้หมดอายุ
 กรณีอื่น              → ยังใช้ได้</pre><div class="hint">ข้อจำกัด: เว็บนี้ช่วยติดตามวันที่ผู้ใช้กรอก ไม่สามารถยืนยันความปลอดภัยของอาหารหรือวันหมดอายุจากผู้ผลิตได้ ข้อมูลจัดเก็บในเบราว์เซอร์เครื่องนี้เท่านั้น</div></div></section>
 <footer class="footer">Smart Pantry · โครงงานวิยุตคณิตและอัลกอริทึม · บันทึกข้อมูลในเครื่องนี้อัตโนมัติ</footer></main><div id="toast" class="toast hidden" role="status"></div>
 <script>
-const KEY='smart-pantry-items-v1';
-const $=id=>document.getElementById(id);
-let items=loadItems(), toastTimer;
-const NOTICE_KEY='smart-pantry-notified-v1';
-function loadItems(){try{const d=JSON.parse(localStorage.getItem(KEY)||'[]');return Array.isArray(d)?d.filter(x=>x&&x.id&&x.name&&x.expiry):[]}catch{return []}}
-function persist(){localStorage.setItem(KEY,JSON.stringify(items));render();checkDesktopNotifications()}
-function todayISO(){const d=new Date();d.setHours(0,0,0,0);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
-function daysLeft(x){return Math.round((new Date(x.expiry+'T00:00:00')-new Date(todayISO()+'T00:00:00'))/86400000)}
-function status(x){const n=daysLeft(x);return n<0?['หมดอายุแล้ว','expired',n]:n===0?['หมดอายุวันนี้','soon',n]:n<=3?['ใกล้หมดอายุ','soon',n]:['ยังใช้ได้','good',n]}
-function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function fmtQty(n){return Number(n).toLocaleString('th-TH',{maximumFractionDigits:3})}
-function card(x){const [label,cls,n]=status(x);const remaining=n<0?'หมดอายุแล้ว '+Math.abs(n)+' วัน':n===0?'หมดอายุวันนี้':'เหลือ '+n+' วัน';return '<article class="item"><div class="itemtop"><div><h3>'+esc(x.name)+'</h3><div class="muted">'+esc(x.category)+'</div></div><span class="badge '+cls+'">'+label+'</span></div><div class="meta"><span class="tag">'+fmtQty(x.quantity)+' '+esc(x.unit)+'</span><span class="tag">หมดอายุ '+esc(x.expiry)+'</span><span class="tag">'+remaining+'</span></div>'+(x.note?'<p class="muted">'+esc(x.note)+'</p>':'')+'<div class="actions"><button class="secondary" data-edit="'+esc(x.id)+'">แก้ไข</button><button class="danger" data-delete="'+esc(x.id)+'">ลบ</button></div></article>'}
-function renderList(elId,list,empty){$(elId).innerHTML=list.length?'<div class="items">'+list.map(card).join('')+'</div>':'<div class="empty">'+empty+'</div>'}
-function render(){const expired=items.filter(x=>daysLeft(x)<0),soon=items.filter(x=>daysLeft(x)>=0&&daysLeft(x)<=3),good=items.filter(x=>daysLeft(x)>3);$('stat-total').textContent=items.length;$('stat-soon').textContent=soon.length;$('stat-expired').textContent=expired.length;$('stat-good').textContent=good.length;const urgent=items.filter(x=>daysLeft(x)<=3).sort((a,b)=>a.expiry.localeCompare(b.expiry));renderList('dashboard-urgent',urgent.slice(0,4),'ยังไม่มีรายการเร่งด่วน 🎉');renderList('urgent-list',urgent,'ไม่มีรายการที่ต้องรีบใช้ 🎉');let list=items.filter(x=>x.name.toLocaleLowerCase('th').includes($('search').value.trim().toLocaleLowerCase('th'))&&(!$('filter-category').value||x.category===$('filter-category').value));const sort=$('sort').value;if(sort==='expiry')list.sort((a,b)=>a.expiry.localeCompare(b.expiry));if(sort==='expiry-desc')list.sort((a,b)=>b.expiry.localeCompare(a.expiry));if(sort==='name')list.sort((a,b)=>a.name.localeCompare(b.name,'th'));if(sort==='quantity')list.sort((a,b)=>Number(b.quantity)-Number(a.quantity));renderList('inventory-list',list,'ยังไม่มีวัตถุดิบ หรือไม่พบรายการที่ค้นหา');updateNotificationUI();}
-function showPage(name){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('hidden',x.id!==name));document.querySelectorAll('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===name));if(name==='inventory')render();window.scrollTo({top:0,behavior:'smooth'})}
-function notify(msg){$('toast').textContent=msg;$('toast').classList.remove('hidden');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.add('hidden'),2600)}
-function resetForm(){ $('item-form').reset();$('edit-id').value='';$('expiry').value=todayISO();$('form-title').textContent='➕ เพิ่มวัตถุดิบใหม่';$('save-button').textContent='บันทึกวัตถุดิบ'}
-function editItem(id){const x=items.find(v=>String(v.id)===String(id));if(!x)return;$('edit-id').value=x.id;$('name').value=x.name;$('category').value=x.category;$('quantity').value=x.quantity;$('unit').value=x.unit;$('expiry').value=x.expiry;$('note').value=x.note||'';$('form-title').textContent='✏️ แก้ไขวัตถุดิบ';$('save-button').textContent='บันทึกการแก้ไข';showPage('add')}
-document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
-$('item-form').addEventListener('submit',e=>{e.preventDefault();const name=$('name').value.trim(),qty=Number($('quantity').value),expiry=$('expiry').value;if(!name){notify('กรุณากรอกชื่อวัตถุดิบ');return}if(!(qty>0)||!expiry){notify('กรุณาตรวจสอบจำนวนและวันหมดอายุ');return}const id=$('edit-id').value;const record={id:id||String(Date.now())+'-'+Math.random().toString(36).slice(2,7),name,category:$('category').value,quantity:qty,unit:$('unit').value,expiry,note:$('note').value.trim(),updatedAt:new Date().toISOString()};if(id){items=items.map(x=>String(x.id)===String(id)?record:x);notify('แก้ไขข้อมูลเรียบร้อย')}else{items.push(record);notify('เพิ่มวัตถุดิบเรียบร้อย')}persist();resetForm();showPage('inventory')});
-$('cancel-edit').addEventListener('click',()=>{resetForm();notify('ล้างฟอร์มแล้ว')});
-document.addEventListener('click',e=>{const ed=e.target.closest('[data-edit]'),del=e.target.closest('[data-delete]');if(ed)editItem(ed.dataset.edit);if(del){const x=items.find(v=>String(v.id)===String(del.dataset.delete));if(x&&confirm('ต้องการลบ “'+x.name+'” ใช่ไหม?')){items=items.filter(v=>String(v.id)!==String(del.dataset.delete));persist();notify('ลบรายการแล้ว')}}});
-['search','filter-category','sort'].forEach(id=>$(id).addEventListener(id==='search'?'input':'change',render));
-function updateNotificationUI(){const urgent=items.filter(x=>daysLeft(x)<=3).sort((a,b)=>a.expiry.localeCompare(b.expiry));const expired=urgent.filter(x=>daysLeft(x)<0).length;const today=urgent.filter(x=>daysLeft(x)===0).length;const soon=urgent.filter(x=>daysLeft(x)>0).length;let parts=[];if(expired)parts.push('หมดอายุแล้ว '+expired+' รายการ');if(today)parts.push('หมดอายุวันนี้ '+today+' รายการ');if(soon)parts.push('จะหมดอายุใน 1–3 วัน '+soon+' รายการ');$('notification-summary').textContent=parts.length?'⚠️ '+parts.join(' · '):'✅ ตอนนี้ไม่มีวัตถุดิบที่หมดอายุหรือจะหมดอายุภายใน 3 วัน';if(!('Notification' in window)){$('enable-notifications').disabled=true;$('test-notification').disabled=true;$('notification-help').textContent='เบราว์เซอร์นี้ไม่รองรับการแจ้งเตือนบนอุปกรณ์ แต่การแจ้งเตือนบนหน้าเว็บยังใช้งานได้'}else if(Notification.permission==='granted'){$('enable-notifications').textContent='เปิดการแจ้งเตือนแล้ว';$('notification-help').textContent='อนุญาตแล้ว · ระบบจะแจ้งเตือนรายการเร่งด่วนไม่เกินวันละครั้งต่อรายการ ขณะเปิดเว็บอยู่'}else if(Notification.permission==='denied'){$('enable-notifications').textContent='การแจ้งเตือนถูกบล็อก';$('notification-help').textContent='เบราว์เซอร์บล็อกการแจ้งเตือนอยู่ กรุณาเปลี่ยนสิทธิ์การแจ้งเตือนในการตั้งค่าเว็บไซต์ของเบราว์เซอร์'}else{$('enable-notifications').textContent='เปิดการแจ้งเตือนบนอุปกรณ์';$('notification-help').textContent='กดปุ่มเพื่ออนุญาตการแจ้งเตือนบนอุปกรณ์ การแจ้งเตือนทำงานเมื่อเว็บเปิดอยู่'} }
-function checkDesktopNotifications(){if(!('Notification' in window)||Notification.permission!=='granted')return;let sent={};try{sent=JSON.parse(localStorage.getItem(NOTICE_KEY)||'{}')}catch{}const today=todayISO();items.filter(x=>daysLeft(x)<=3).forEach(x=>{const n=daysLeft(x),key=String(x.id),stamp=today+'|'+x.expiry;if(sent[key]===stamp)return;const title=n<0?'⚠️ วัตถุดิบหมดอายุแล้ว':n===0?'⏰ วัตถุดิบหมดอายุวันนี้':'🥬 วัตถุดิบใกล้หมดอายุ';const body=n<0?x.name+' หมดอายุมาแล้ว '+Math.abs(n)+' วัน':n===0?x.name+' หมดอายุวันนี้':' '+x.name+' จะหมดอายุใน '+n+' วัน';try{new Notification(title,{body,tag:'smart-pantry-'+key});sent[key]=stamp}catch(e){console.warn('Notification failed',e)}});localStorage.setItem(NOTICE_KEY,JSON.stringify(sent))}
-$('enable-notifications').addEventListener('click',async()=>{if(!('Notification' in window)){notify('เบราว์เซอร์นี้ไม่รองรับการแจ้งเตือน');return}try{const permission=await Notification.requestPermission();updateNotificationUI();if(permission==='granted'){notify('เปิดการแจ้งเตือนแล้ว');checkDesktopNotifications()}else notify('ยังไม่ได้รับอนุญาตให้แจ้งเตือน')}}); 
-$('test-notification').addEventListener('click',()=>{if(!('Notification' in window)||Notification.permission!=='granted'){notify('กรุณาเปิดการแจ้งเตือนก่อน');return}new Notification('🔔 Smart Pantry',{body:'การแจ้งเตือนบนอุปกรณ์ทำงานแล้ว'});notify('ส่งการแจ้งเตือนทดสอบแล้ว')});
-document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkDesktopNotifications()});window.addEventListener('focus',checkDesktopNotifications);
-$('expiry').value=todayISO();render();checkDesktopNotifications();
+'use strict';
+const KEY = 'smart-pantry-items-v1';
+const NOTICE_KEY = 'smart-pantry-notified-v1';
+const $ = id => document.getElementById(id);
+let toastTimer = null;
+let storageAvailable = true;
+let items = loadItems();
+
+function loadItems() {
+  try {
+    const raw = window.localStorage.getItem(KEY);
+    const data = JSON.parse(raw || '[]');
+    return Array.isArray(data) ? data.filter(isValidItem) : [];
+  } catch (error) {
+    storageAvailable = false;
+    console.warn('Smart Pantry storage unavailable:', error);
+    return [];
+  }
+}
+function isValidItem(x) {
+  return !!x && typeof x === 'object' && x.id != null &&
+    typeof x.name === 'string' && x.name.trim() !== '' &&
+    typeof x.expiry === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(x.expiry);
+}
+function persist() {
+  try {
+    window.localStorage.setItem(KEY, JSON.stringify(items));
+    storageAvailable = true;
+  } catch (error) {
+    storageAvailable = false;
+    console.error('Could not save Smart Pantry data:', error);
+    notify('บันทึกในเบราว์เซอร์ไม่ได้ ข้อมูลอาจหายเมื่อปิดหน้านี้');
+  }
+  render();
+  checkDesktopNotifications();
+}
+function todayISO() {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+function daysLeft(x) {
+  const expiry = new Date(x.expiry + 'T00:00:00');
+  if (Number.isNaN(expiry.getTime())) return 999999;
+  return Math.round((expiry - new Date(todayISO() + 'T00:00:00')) / 86400000);
+}
+function status(x) {
+  const n = daysLeft(x);
+  return n < 0 ? ['หมดอายุแล้ว', 'expired', n] : n === 0 ? ['หมดอายุวันนี้', 'soon', n] : n <= 3 ? ['ใกล้หมดอายุ', 'soon', n] : ['ยังใช้ได้', 'good', n];
+}
+function esc(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function fmtQty(n) {
+  return Number(n).toLocaleString('th-TH', {maximumFractionDigits: 3});
+}
+function card(x) {
+  const s = status(x), n = s[2];
+  const remaining = n < 0 ? 'หมดอายุแล้ว ' + Math.abs(n) + ' วัน' : n === 0 ? 'หมดอายุวันนี้' : 'เหลือ ' + n + ' วัน';
+  return '<article class="item"><div class="itemtop"><div><h3>' + esc(x.name) + '</h3><div class="muted">' + esc(x.category || 'อื่น ๆ') + '</div></div><span class="badge ' + s[1] + '">' + s[0] + '</span></div><div class="meta"><span class="tag">' + fmtQty(x.quantity) + ' ' + esc(x.unit || 'ชิ้น') + '</span><span class="tag">หมดอายุ ' + esc(x.expiry) + '</span><span class="tag">' + remaining + '</span></div>' + (x.note ? '<p class="muted">' + esc(x.note) + '</p>' : '') + '<div class="actions"><button class="secondary" type="button" data-edit="' + esc(x.id) + '">แก้ไข</button><button class="danger" type="button" data-delete="' + esc(x.id) + '">ลบ</button></div></article>';
+}
+function renderList(elId, list, empty) {
+  const el = $(elId);
+  if (!el) return;
+  el.innerHTML = list.length ? '<div class="items">' + list.map(card).join('') + '</div>' : '<div class="empty">' + empty + '</div>';
+}
+function render() {
+  const expired = items.filter(x => daysLeft(x) < 0);
+  const soon = items.filter(x => daysLeft(x) >= 0 && daysLeft(x) <= 3);
+  const good = items.filter(x => daysLeft(x) > 3);
+  $('stat-total').textContent = items.length;
+  $('stat-soon').textContent = soon.length;
+  $('stat-expired').textContent = expired.length;
+  $('stat-good').textContent = good.length;
+  const urgent = items.filter(x => daysLeft(x) <= 3).sort((a,b) => a.expiry.localeCompare(b.expiry));
+  renderList('dashboard-urgent', urgent.slice(0,4), 'ยังไม่มีรายการเร่งด่วน');
+  renderList('urgent-list', urgent, 'ไม่มีรายการที่ต้องรีบใช้');
+  const search = $('search').value.trim().toLocaleLowerCase('th');
+  let list = items.filter(x => x.name.toLocaleLowerCase('th').includes(search) && (!$('filter-category').value || x.category === $('filter-category').value));
+  const sort = $('sort').value;
+  if (sort === 'expiry') list.sort((a,b) => a.expiry.localeCompare(b.expiry));
+  else if (sort === 'expiry-desc') list.sort((a,b) => b.expiry.localeCompare(a.expiry));
+  else if (sort === 'name') list.sort((a,b) => a.name.localeCompare(b.name,'th'));
+  else if (sort === 'quantity') list.sort((a,b) => Number(b.quantity)-Number(a.quantity));
+  renderList('inventory-list', list, 'ยังไม่มีวัตถุดิบ หรือไม่พบรายการที่ค้นหา');
+  updateNotificationUI();
+}
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(x => x.classList.toggle('hidden', x.id !== name));
+  document.querySelectorAll('[data-page]').forEach(x => x.classList.toggle('active', x.dataset.page === name));
+  if (name === 'inventory') render();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function notify(msg) {
+  const toast = $('toast');
+  toast.textContent = msg;
+  toast.classList.remove('hidden');
+  if (toastTimer) window.clearTimeout(toastTimer);
+  toastTimer = window.setTimeout(() => toast.classList.add('hidden'), 3200);
+}
+function resetForm() {
+  $('item-form').reset();
+  $('edit-id').value = '';
+  $('expiry').value = todayISO();
+  $('form-title').textContent = '➕ เพิ่มวัตถุดิบใหม่';
+  $('save-button').textContent = 'บันทึกวัตถุดิบ';
+}
+function editItem(id) {
+  const x = items.find(v => String(v.id) === String(id));
+  if (!x) { notify('ไม่พบวัตถุดิบนี้'); return; }
+  $('edit-id').value = x.id;
+  $('name').value = x.name;
+  $('category').value = x.category || 'อื่น ๆ';
+  $('quantity').value = x.quantity;
+  $('unit').value = x.unit || 'ชิ้น';
+  $('expiry').value = x.expiry;
+  $('note').value = x.note || '';
+  $('form-title').textContent = '✏️ แก้ไขวัตถุดิบ';
+  $('save-button').textContent = 'บันทึกการแก้ไข';
+  showPage('add');
+  $('name').focus();
+}
+document.querySelectorAll('[data-page]').forEach(b => b.addEventListener('click', () => showPage(b.dataset.page)));
+
+$('item-form').addEventListener('submit', e => {
+  e.preventDefault();
+  const name = $('name').value.trim(), qty = Number($('quantity').value), expiry = $('expiry').value;
+  if (!name) { notify('กรุณากรอกชื่อวัตถุดิบ'); $('name').focus(); return; }
+  if (!(qty > 0) || !Number.isFinite(qty)) { notify('จำนวนต้องมากกว่า 0'); $('quantity').focus(); return; }
+  if (!expiry || !/^\d{4}-\d{2}-\d{2}$/.test(expiry)) { notify('กรุณาเลือกวันหมดอายุ'); $('expiry').focus(); return; }
+  const id = $('edit-id').value;
+  const record = {id: id || (Date.now().toString() + '-' + Math.random().toString(36).slice(2,8)), name, category:$('category').value, quantity:qty, unit:$('unit').value, expiry, note:$('note').value.trim(), updatedAt:new Date().toISOString()};
+  if (id) {
+    const index = items.findIndex(x => String(x.id) === String(id));
+    if (index < 0) { notify('ไม่พบรายการเดิม จึงไม่สามารถแก้ไขได้'); return; }
+    items[index] = record;
+  } else items.push(record);
+  persist();
+  resetForm();
+  showPage('inventory');
+  notify(id ? 'แก้ไขข้อมูลเรียบร้อย' : 'เพิ่มวัตถุดิบเรียบร้อย');
+});
+$('cancel-edit').addEventListener('click', () => { resetForm(); notify('ล้างฟอร์มแล้ว'); });
+document.addEventListener('click', e => {
+  const edit = e.target.closest('[data-edit]'), del = e.target.closest('[data-delete]');
+  if (edit) editItem(edit.dataset.edit);
+  if (del) {
+    const id = del.dataset.delete, x = items.find(v => String(v.id) === String(id));
+    if (x && window.confirm('ต้องการลบ “' + x.name + '” ใช่ไหม?')) {
+      items = items.filter(v => String(v.id) !== String(id));
+      persist();
+      notify('ลบรายการแล้ว');
+    }
+  }
+});
+['search','filter-category','sort'].forEach(id => $(id).addEventListener(id === 'search' ? 'input' : 'change', render));
+
+function updateNotificationUI() {
+  const urgent = items.filter(x => daysLeft(x) <= 3);
+  const expired = urgent.filter(x => daysLeft(x) < 0).length;
+  const today = urgent.filter(x => daysLeft(x) === 0).length;
+  const soon = urgent.filter(x => daysLeft(x) > 0).length;
+  const parts = [];
+  if (expired) parts.push('หมดอายุแล้ว ' + expired + ' รายการ');
+  if (today) parts.push('หมดอายุวันนี้ ' + today + ' รายการ');
+  if (soon) parts.push('จะหมดอายุใน 1–3 วัน ' + soon + ' รายการ');
+  $('notification-summary').textContent = parts.length ? '⚠️ ' + parts.join(' · ') : '✅ ตอนนี้ไม่มีวัตถุดิบที่หมดอายุหรือจะหมดอายุภายใน 3 วัน';
+  if (!('Notification' in window) || !window.isSecureContext) {
+    $('enable-notifications').disabled = true;
+    $('test-notification').disabled = true;
+    $('notification-help').textContent = !window.isSecureContext ? 'การแจ้งเตือนของอุปกรณ์ต้องเปิดเว็บผ่าน HTTPS (เช่น GitHub Pages) หรือ localhost' : 'เบราว์เซอร์นี้ไม่รองรับการแจ้งเตือนบนอุปกรณ์ แต่การแจ้งเตือนบนหน้าเว็บยังใช้งานได้';
+  } else if (Notification.permission === 'granted') {
+    $('enable-notifications').disabled = false;
+    $('test-notification').disabled = false;
+    $('enable-notifications').textContent = 'เปิดการแจ้งเตือนแล้ว';
+    $('notification-help').textContent = 'อนุญาตแล้ว · ระบบตรวจรายการเร่งด่วนเมื่อเปิดหรือกลับมาที่เว็บ';
+  } else if (Notification.permission === 'denied') {
+    $('enable-notifications').disabled = false;
+    $('test-notification').disabled = false;
+    $('enable-notifications').textContent = 'การแจ้งเตือนถูกบล็อก';
+    $('notification-help').textContent = 'เบราว์เซอร์บล็อกการแจ้งเตือน กรุณาเปลี่ยนสิทธิ์การแจ้งเตือนในการตั้งค่าเว็บไซต์';
+  } else {
+    $('enable-notifications').disabled = false;
+    $('test-notification').disabled = false;
+    $('enable-notifications').textContent = 'เปิดการแจ้งเตือนบนอุปกรณ์';
+    $('notification-help').textContent = 'กดปุ่มเพื่ออนุญาตการแจ้งเตือนบนอุปกรณ์ การแจ้งเตือนทำงานเมื่อเว็บเปิดอยู่';
+  }
+}
+function checkDesktopNotifications() {
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  let sent = {};
+  try { sent = JSON.parse(window.localStorage.getItem(NOTICE_KEY) || '{}'); } catch (e) { sent = {}; }
+  const today = todayISO();
+  items.filter(x => daysLeft(x) <= 3).forEach(x => {
+    const n = daysLeft(x), key = String(x.id), stamp = today + '|' + x.expiry;
+    if (sent[key] === stamp) return;
+    const title = n < 0 ? '⚠️ วัตถุดิบหมดอายุแล้ว' : n === 0 ? '⏰ วัตถุดิบหมดอายุวันนี้' : '🥬 วัตถุดิบใกล้หมดอายุ';
+    const body = n < 0 ? x.name + ' หมดอายุมาแล้ว ' + Math.abs(n) + ' วัน' : n === 0 ? x.name + ' หมดอายุวันนี้' : x.name + ' จะหมดอายุใน ' + n + ' วัน';
+    try { new Notification(title, {body, tag:'smart-pantry-' + key}); sent[key] = stamp; } catch (e) { console.warn('Notification failed:', e); }
+  });
+  try { window.localStorage.setItem(NOTICE_KEY, JSON.stringify(sent)); } catch (e) { /* storage is optional */ }
+}
+$('enable-notifications').addEventListener('click', async () => {
+  if (!('Notification' in window)) { notify('เบราว์เซอร์นี้ไม่รองรับการแจ้งเตือน'); return; }
+  if (!window.isSecureContext) { notify('กรุณาเปิดเว็บผ่าน HTTPS เพื่อใช้การแจ้งเตือน'); return; }
+  try {
+    const permission = await Notification.requestPermission();
+    updateNotificationUI();
+    if (permission === 'granted') { notify('เปิดการแจ้งเตือนแล้ว'); checkDesktopNotifications(); }
+    else notify('ยังไม่ได้รับอนุญาตให้แจ้งเตือน');
+  } catch (error) { console.error(error); notify('เปิดการแจ้งเตือนไม่สำเร็จ'); }
+});
+$('test-notification').addEventListener('click', () => {
+  if (!('Notification' in window) || Notification.permission !== 'granted') { notify('กรุณาเปิดการแจ้งเตือนก่อน'); return; }
+  try { new Notification('🔔 Smart Pantry', {body:'การแจ้งเตือนบนอุปกรณ์ทำงานแล้ว'}); notify('ส่งการแจ้งเตือนทดสอบแล้ว'); }
+  catch (error) { console.error(error); notify('ส่งการแจ้งเตือนไม่สำเร็จ'); }
+});
+$('export-data').addEventListener('click', () => {
+  try {
+    const blob = new Blob([JSON.stringify({app:'Smart Pantry',version:1,exportedAt:new Date().toISOString(),items}, null, 2)], {type:'application/json;charset=utf-8'});
+    const url = URL.createObjectURL(blob), a = document.createElement('a');
+    a.href = url; a.download = 'smart-pantry-backup-' + todayISO() + '.json';
+    document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    notify('ส่งออกข้อมูลสำรองแล้ว');
+  } catch (error) { console.error(error); notify('ส่งออกข้อมูลไม่สำเร็จ'); }
+});
+$('import-data-button').addEventListener('click', () => $('import-data-file').click());
+$('import-data-file').addEventListener('change', async e => {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  try {
+    const data = JSON.parse(await file.text());
+    const incoming = Array.isArray(data) ? data : data && Array.isArray(data.items) ? data.items : null;
+    if (!incoming || !incoming.every(isValidItem)) throw new Error('รูปแบบข้อมูลไม่ถูกต้อง');
+    const cleaned = incoming.map(x => ({id:String(x.id),name:x.name.trim(),category:String(x.category || 'อื่น ๆ'),quantity:Number(x.quantity),unit:String(x.unit || 'ชิ้น'),expiry:x.expiry,note:String(x.note || ''),updatedAt:x.updatedAt || new Date().toISOString()}));
+    if (cleaned.some(x => !Number.isFinite(x.quantity) || x.quantity <= 0)) throw new Error('พบจำนวนที่ไม่ถูกต้อง');
+    if (!window.confirm('นำเข้าข้อมูล ' + cleaned.length + ' รายการแทนที่คลังปัจจุบัน ' + items.length + ' รายการใช่ไหม? แนะนำให้ส่งออกข้อมูลเดิมก่อน')) return;
+    items = cleaned;
+    persist(); showPage('inventory'); notify('นำเข้าข้อมูลสำเร็จ ' + items.length + ' รายการ');
+  } catch (error) { console.error(error); notify('นำเข้าไม่ได้: ไฟล์ JSON ไม่ถูกต้องหรือข้อมูลไม่ครบ'); }
+  finally { e.target.value = ''; }
+});
+$('clear-all').addEventListener('click', () => {
+  if (!items.length) { notify('คลังวัตถุดิบว่างอยู่แล้ว'); return; }
+  if (window.confirm('ต้องการลบวัตถุดิบทั้งหมด ' + items.length + ' รายการหรือไม่? แนะนำให้ส่งออกข้อมูลสำรองก่อน')) {
+    items = []; persist(); notify('ล้างคลังทั้งหมดแล้ว');
+  }
+});
+document.addEventListener('visibilitychange', () => { if (!document.hidden) checkDesktopNotifications(); });
+window.addEventListener('focus', checkDesktopNotifications);
+window.addEventListener('error', e => { console.error('Smart Pantry error:', e.error || e.message); notify('เกิดข้อผิดพลาดบางอย่าง ลองโหลดหน้าเว็บใหม่'); });
+$('expiry').value = todayISO();
+render();
+if (!storageAvailable) notify('อ่านข้อมูลเดิมไม่ได้ ระบบเริ่มด้วยคลังว่างชั่วคราว');
+checkDesktopNotifications();
 </script></body></html>
