@@ -33,7 +33,7 @@ const KEY='smart-pantry-items-v1';
 const $=id=>document.getElementById(id);
 let items=loadItems(), toastTimer;\nconst NOTICE_KEY='smart-pantry-notified-v1';
 function loadItems(){try{const d=JSON.parse(localStorage.getItem(KEY)||'[]');return Array.isArray(d)?d.filter(x=>x&&x.id&&x.name&&x.expiry):[]}catch{return []}}
-function persist(){localStorage.setItem(KEY,JSON.stringify(items));render()}
+function persist(){localStorage.setItem(KEY,JSON.stringify(items));render();checkDesktopNotifications()}
 function todayISO(){const d=new Date();d.setHours(0,0,0,0);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function daysLeft(x){return Math.round((new Date(x.expiry+'T00:00:00')-new Date(todayISO()+'T00:00:00'))/86400000)}
 function status(x){const n=daysLeft(x);return n<0?['หมดอายุแล้ว','expired',n]:n===0?['หมดอายุวันนี้','soon',n]:n<=3?['ใกล้หมดอายุ','soon',n]:['ยังใช้ได้','good',n]}
