@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#176b4d"><meta name="description" content="Smart Pantry ระบบจัดการวัตถุดิบและวางแผนการใช้ก่อนหมดอายุ">
+<meta name="theme-color" content="#176b4d"><link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="./icon.svg" type="image/svg+xml"><meta name="description" content="Smart Pantry ระบบจัดการวัตถุดิบและวางแผนการใช้ก่อนหมดอายุ">
 <title>Smart Pantry | จัดการวัตถุดิบ</title>
 <style>
 :root{--green:#176b4d;--green2:#21845e;--mint:#e9f7ef;--ink:#18352a;--muted:#6b7f75;--line:#e1ebe4;--bg:#f5f8f5;--red:#b42318;--amber:#9a6700;--shadow:0 8px 28px #163d2810}
@@ -13,7 +13,7 @@
 <nav class="nav" aria-label="เมนูหลัก"><button class="active" data-page="dashboard">ภาพรวม</button><button data-page="add">＋ เพิ่มวัตถุดิบ</button><button data-page="inventory">คลังวัตถุดิบ</button><button data-page="urgent">ควรใช้ก่อน</button><button data-page="about">เกี่ยวกับโครงงาน</button></nav>
 <section id="dashboard" class="page">
 <div class="stats"><div class="stat"><span class="label">วัตถุดิบทั้งหมด</span><strong id="stat-total">0</strong><small>รายการในคลัง</small></div><div class="stat"><span class="label">ใกล้หมดอายุ</span><strong id="stat-soon">0</strong><small>ภายใน 3 วัน</small></div><div class="stat"><span class="label">หมดอายุแล้ว</span><strong id="stat-expired">0</strong><small>ควรตรวจสอบ</small></div><div class="stat"><span class="label">ยังใช้ได้</span><strong id="stat-good">0</strong><small>เหลือมากกว่า 3 วัน</small></div></div>
-<div class="panel"><h2>🔔 การแจ้งเตือนวันหมดอายุ</h2><p class="muted">ระบบจะแสดงรายการเร่งด่วนบนหน้าเว็บเสมอ และสามารถเปิดการแจ้งเตือนของเบราว์เซอร์เพิ่มเติมได้เมื่ออนุญาต</p><div id="notification-summary" class="hint" role="status">กำลังตรวจสอบสถานะวัตถุดิบ…</div><div class="actions"><button class="primary" type="button" id="enable-notifications">เปิดการแจ้งเตือนบนอุปกรณ์</button><button class="secondary" type="button" id="test-notification">ทดสอบการแจ้งเตือน</button></div><p class="muted" id="notification-help">หมายเหตุ: การแจ้งเตือนบนอุปกรณ์ทำงานเมื่อเว็บเปิดอยู่ และเบราว์เซอร์รองรับเท่านั้น</p></div><div class="panel"><h2>⏳ รายการที่ควรตรวจสอบก่อน</h2><div id="dashboard-urgent"></div></div><div class="hint"><b>ระบบทำงานอย่างไร?</b><br>1. บันทึกวัตถุดิบและวันหมดอายุ &nbsp; 2. คำนวณจำนวนวันคงเหลือ &nbsp; 3. เรียงรายการที่ควรใช้ก่อนขึ้นมาแสดง</div>
+<div class="panel"><h2>🔔 การแจ้งเตือนวันหมดอายุ</h2><p class="muted">รับ Web Push แจ้งเตือนวันหมดอายุได้แม้ปิดเว็บ เมื่อเพิ่ม Smart Pantry ไปยังหน้าจอโฮมบน iPhone และตั้งค่าระบบแจ้งเตือนสำเร็จ</p><div id="notification-summary" class="hint" role="status">กำลังตรวจสอบสถานะวัตถุดิบ…</div><div class="actions"><button class="primary" type="button" id="enable-notifications">เปิดการแจ้งเตือนบนอุปกรณ์</button><button class="secondary" type="button" id="test-notification">ทดสอบการแจ้งเตือน</button></div><p class="muted" id="notification-help">ต้องเปิดจากไอคอน Smart Pantry บนหน้าจอโฮมของ iPhone และตั้งค่าเซิร์ฟเวอร์แจ้งเตือนก่อน ระบบจะตรวจวันหมดอายุอัตโนมัติทุกวัน</p></div><div class="panel"><h2>⏳ รายการที่ควรตรวจสอบก่อน</h2><div id="dashboard-urgent"></div></div><div class="hint"><b>ระบบทำงานอย่างไร?</b><br>1. บันทึกวัตถุดิบและวันหมดอายุ &nbsp; 2. คำนวณจำนวนวันคงเหลือ &nbsp; 3. เรียงรายการที่ควรใช้ก่อนขึ้นมาแสดง</div>
 </section>
 <section id="add" class="page hidden"><div class="panel"><h2 id="form-title">➕ เพิ่มวัตถุดิบใหม่</h2><form id="item-form"><input type="hidden" id="edit-id"><div class="formgrid">
 <div class="field"><label for="name">ชื่อวัตถุดิบ *</label><input id="name" required maxlength="100" placeholder="เช่น นมสด"></div>
@@ -37,6 +37,9 @@
 'use strict';
 const KEY = 'smart-pantry-items-v1';
 const NOTICE_KEY = 'smart-pantry-notified-v1';
+const PUSH_API_BASE = 'https://REPLACE_WITH_YOUR_WORKER.workers.dev';
+const VAPID_PUBLIC_KEY = 'REPLACE_WITH_VAPID_PUBLIC_KEY';
+const PUSH_USER_KEY = 'smart-pantry-push-user-v1';
 const $ = id => document.getElementById(id);
 let toastTimer = null;
 let storageAvailable = true;
@@ -69,6 +72,7 @@ function persist() {
   }
   render();
   checkDesktopNotifications();
+  syncCloudIfSubscribed();
 }
 function todayISO() {
   const d = new Date();
@@ -207,8 +211,8 @@ function updateNotificationUI() {
   } else if (Notification.permission === 'granted') {
     $('enable-notifications').disabled = false;
     $('test-notification').disabled = false;
-    $('enable-notifications').textContent = 'เปิดการแจ้งเตือนแล้ว';
-    $('notification-help').textContent = 'อนุญาตแล้ว · ระบบตรวจรายการเร่งด่วนเมื่อเปิดหรือกลับมาที่เว็บ';
+    $('enable-notifications').textContent = 'ตั้งค่า Web Push / ตรวจสอบอีกครั้ง';
+    $('notification-help').textContent = 'การอนุญาตเบราว์เซอร์อย่างเดียวไม่พอ ต้องสมัคร Web Push กับเซิร์ฟเวอร์ให้สำเร็จด้วย';
   } else if (Notification.permission === 'denied') {
     $('enable-notifications').disabled = false;
     $('test-notification').disabled = false;
@@ -235,20 +239,96 @@ function checkDesktopNotifications() {
   });
   try { window.localStorage.setItem(NOTICE_KEY, JSON.stringify(sent)); } catch (e) { /* storage is optional */ }
 }
-$('enable-notifications').addEventListener('click', async () => {
-  if (!('Notification' in window)) { notify('เบราว์เซอร์นี้ไม่รองรับการแจ้งเตือน'); return; }
-  if (!window.isSecureContext) { notify('กรุณาเปิดเว็บผ่าน HTTPS เพื่อใช้การแจ้งเตือน'); return; }
+function pushConfigured() {
+  return !PUSH_API_BASE.includes('REPLACE_WITH_YOUR_WORKER') &&
+    /^https:\/\//.test(PUSH_API_BASE) &&
+    !VAPID_PUBLIC_KEY.includes('REPLACE_WITH_');
+}
+function getPushUserId() {
+  let id = localStorage.getItem(PUSH_USER_KEY);
+  if (!id) {
+    id = crypto.randomUUID();
+    localStorage.setItem(PUSH_USER_KEY, id);
+  }
+  return id;
+}
+function decodeVapidKey(base64String) {
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+  const raw = atob(base64);
+  return Uint8Array.from(raw, c => c.charCodeAt(0));
+}
+async function callPushApi(path, body) {
+  if (!pushConfigured()) throw new Error('ยังไม่ได้ตั้งค่า PUSH_API_BASE และ VAPID_PUBLIC_KEY ใน index.html');
+  const response = await fetch(PUSH_API_BASE.replace(/\/$/, '') + path, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.error || ('HTTP ' + response.status));
+  return data;
+}
+function publicItemsForPush() {
+  return items.map(x => ({ id: String(x.id), name: String(x.name).slice(0,100), expiry: x.expiry }));
+}
+async function syncCloudIfSubscribed() {
+  if (!pushConfigured() || !('serviceWorker' in navigator) || !('PushManager' in window)) return;
   try {
-    const permission = await Notification.requestPermission();
+    const registration = await navigator.serviceWorker.getRegistration('./');
+    const subscription = registration && await registration.pushManager.getSubscription();
+    if (subscription) await callPushApi('/api/sync', { userId: getPushUserId(), items: publicItemsForPush() });
+  } catch (error) {
+    console.warn('Smart Pantry cloud sync failed:', error);
+  }
+}
+async function enableWebPush() {
+  if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+    throw new Error('อุปกรณ์นี้ไม่รองรับ Web Push กรุณาอัปเดต iOS และเปิดจากไอคอนที่เพิ่มบนหน้าจอโฮม');
+  }
+  if (!pushConfigured()) throw new Error('ยังไม่ได้ตั้งค่าเซิร์ฟเวอร์ Web Push ตาม README ก่อน');
+  const permission = await Notification.requestPermission();
+  if (permission !== 'granted') throw new Error('ยังไม่ได้อนุญาตการแจ้งเตือนใน iPhone');
+  const registration = await navigator.serviceWorker.register('./sw.js', { scope: './' });
+  await navigator.serviceWorker.ready;
+  let subscription = await registration.pushManager.getSubscription();
+  if (!subscription) {
+    subscription = await registration.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: decodeVapidKey(VAPID_PUBLIC_KEY)
+    });
+  }
+  const userId = getPushUserId();
+  await callPushApi('/api/subscribe', { userId, subscription: subscription.toJSON() });
+  await callPushApi('/api/sync', { userId, items: publicItemsForPush() });
+  notify('ตั้งค่า Web Push สำเร็จแล้ว');
+  $('notification-help').textContent = 'เปิด Web Push แล้ว · เซิร์ฟเวอร์จะตรวจรายการและส่งแจ้งเตือนอัตโนมัติทุกวัน';
+  return true;
+}
+$('enable-notifications').addEventListener('click', async () => {
+  try {
+    await enableWebPush();
     updateNotificationUI();
-    if (permission === 'granted') { notify('เปิดการแจ้งเตือนแล้ว'); checkDesktopNotifications(); }
-    else notify('ยังไม่ได้รับอนุญาตให้แจ้งเตือน');
-  } catch (error) { console.error(error); notify('เปิดการแจ้งเตือนไม่สำเร็จ'); }
+  } catch (error) {
+    console.error(error);
+    notify(error.message || 'ตั้งค่า Web Push ไม่สำเร็จ');
+    $('notification-help').textContent = error.message || 'ตั้งค่า Web Push ไม่สำเร็จ';
+  }
 });
-$('test-notification').addEventListener('click', () => {
-  if (!('Notification' in window) || Notification.permission !== 'granted') { notify('กรุณาเปิดการแจ้งเตือนก่อน'); return; }
-  try { new Notification('🔔 Smart Pantry', {body:'การแจ้งเตือนบนอุปกรณ์ทำงานแล้ว'}); notify('ส่งการแจ้งเตือนทดสอบแล้ว'); }
-  catch (error) { console.error(error); notify('ส่งการแจ้งเตือนไม่สำเร็จ'); }
+$('test-notification').addEventListener('click', async () => {
+  try {
+    if (!pushConfigured()) throw new Error('ยังไม่ได้ตั้งค่าเซิร์ฟเวอร์ Web Push ตาม README ก่อน');
+    if (!('serviceWorker' in navigator)) throw new Error('กรุณาเปิด Smart Pantry จากไอคอนหน้าจอโฮม');
+    const registration = await navigator.serviceWorker.getRegistration('./');
+    if (!registration || !(await registration.pushManager.getSubscription())) {
+      throw new Error('กรุณากด “เปิดการแจ้งเตือนบนอุปกรณ์” และสมัคร Web Push ก่อน');
+    }
+    await callPushApi('/api/test', { userId: getPushUserId() });
+    notify('ส่งคำขอแจ้งเตือนทดสอบแล้ว ตรวจสอบ Notification Center');
+  } catch (error) {
+    console.error(error);
+    notify(error.message || 'ทดสอบการแจ้งเตือนไม่สำเร็จ');
+  }
 });
 $('export-data').addEventListener('click', () => {
   try {
@@ -286,6 +366,11 @@ window.addEventListener('focus', checkDesktopNotifications);
 window.addEventListener('error', e => { console.error('Smart Pantry error:', e.error || e.message); notify('เกิดข้อผิดพลาดบางอย่าง ลองโหลดหน้าเว็บใหม่'); });
 $('expiry').value = todayISO();
 render();
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js', { scope: './' })
+    .then(() => syncCloudIfSubscribed())
+    .catch(error => console.warn('Service worker registration failed:', error));
+}
 if (!storageAvailable) notify('อ่านข้อมูลเดิมไม่ได้ ระบบเริ่มด้วยคลังว่างชั่วคราว');
 checkDesktopNotifications();
 </script></body></html>
