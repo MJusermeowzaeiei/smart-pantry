@@ -548,6 +548,42 @@ pre{background:var(--sand);border-radius:2px;color:var(--ink-deep)}
  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
 
+
+/* Final hierarchy correction: make the actual "ควรใช้ก่อน" section the hero panel */
+#dashboard>.stats+.panel{
+ background:#FCFAF5;color:var(--ink-deep);padding:22px 24px 24px;
+ border:1px solid var(--ledger-line);box-shadow:none;transform:none;
+}
+#dashboard>.stats+.panel h2{
+ margin:-22px -24px 17px;background:var(--dusty-teal);
+ border-left-color:var(--chocolate);color:#FFF9EE;
+}
+#dashboard>.stats+.panel p,#dashboard>.stats+.panel .muted{color:#625040}
+#dashboard>.stats+.panel .hint{background:#E2D3BA;color:var(--ink-deep);border-color:#D9A02B}
+#dashboard>.stats+.panel .primary{background:var(--terracotta);color:#FFF9EE;border-color:var(--terracotta)}
+#dashboard>.stats+.panel .secondary{background:var(--sand);color:var(--chocolate);border-color:var(--ledger-line)}
+#dashboard>.stats+.panel+.panel{
+ grid-column:1;grid-row:3;background:var(--chocolate);color:var(--paper-cream);
+ border:0;padding:24px;box-shadow:7px 7px 0 var(--mustard);transform:rotate(-.3deg);
+}
+#dashboard>.stats+.panel+.panel h2{
+ margin:-24px -24px 20px;background:var(--terracotta);
+ border-left-color:var(--mustard);color:#FFF9EE;
+}
+#dashboard>.stats+.panel+.panel .item{color:var(--paper-cream);border-bottom-color:#766154}
+#dashboard>.stats+.panel+.panel .item h3{color:var(--paper-cream)}
+#dashboard>.stats+.panel+.panel .item .muted{color:var(--sand)}
+#dashboard>.stats+.panel+.panel .item .tag{color:var(--sand);border-color:#766154}
+#dashboard>.stats+.panel+.panel .life-meter{background:#766154}
+#dashboard>.stats+.panel+.panel .item:hover{background:#5B4538}
+#dashboard>.stats+.panel+.panel+.hint{background:var(--dusty-teal);border:0;border-radius:2px;color:#FFF9EE;padding:21px;box-shadow:5px 5px 0 var(--sand)}
+@media(max-width:700px){
+ #dashboard>.stats+.panel{padding:18px 16px;transform:none}
+ #dashboard>.stats+.panel h2{margin:-18px -16px 17px}
+ #dashboard>.stats+.panel+.panel{padding:18px 16px;transform:none}
+ #dashboard>.stats+.panel+.panel h2{margin:-18px -16px 18px}
+}
+
 </style></head>
 <body><main class="wrap">
 <header class="hero"><div><h1>🥬 Smart Pantry</h1><p>รู้ก่อนหมด ใช้ให้ทัน ลดอาหารเหลือทิ้ง</p></div><span class="tag">✨ จัดการครัวอย่างชาญฉลาด</span></header>
