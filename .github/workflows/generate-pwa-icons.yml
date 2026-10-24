@@ -1,0 +1,33 @@
+name: Generate Smart Pantry PNG icons
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'icon-v2.svg'
+      - 'icon-maskable-v2.svg'
+      - 'scripts/generate-icons.cjs'
+      - '.github/workflows/generate-pwa-icons.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install icon renderer
+        run: npm install --prefix /tmp/icon-tools --no-save --no-package-lock sharp
+      - name: Generate PNG assets
+        run: node scripts/generate-icons.cjs
+      - name: Commit generated PNG assets
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add icon-180-v2.png icon-192-v2.png icon-512-v2.png icon-maskable-512-v2.png
+          if ! git diff --cached --quiet; then
+            git commit -m "Generate Smart Pantry v2 PNG icons"
+            git push
+          fi
