@@ -104,6 +104,51 @@ pre{white-space:pre-wrap;background:#f3f2e9;padding:15px;border-radius:10px;colo
 @media(prefers-reduced-motion:reduce){
  *,*::before,*::after{scroll-behavior:auto!important;transition:none!important}
 }
+
+/* Visual refresh: stronger layout contrast while preserving the existing app logic */
+body{background:#f4f2e9;background-image:radial-gradient(circle at 8% 8%,rgba(191,210,173,.22),transparent 24%),radial-gradient(circle at 95% 35%,rgba(219,227,202,.25),transparent 22%)}
+.wrap{max-width:1180px;padding:34px 30px}
+.hero{min-height:225px;padding:42px 44px;border-radius:26px;background:linear-gradient(125deg,#203f30 0%,#315b40 68%,#4c7651 100%);border:0;box-shadow:0 18px 42px rgba(31,62,43,.16);color:#fff}
+.hero:after{width:310px;height:310px;border:1px solid rgba(255,255,255,.18);right:5%;top:-115px;box-shadow:0 0 0 28px rgba(255,255,255,.035),0 0 0 58px rgba(255,255,255,.025)}
+.hero h1{color:#fff;font-size:clamp(2.25rem,5vw,3.5rem);letter-spacing:-.06em}
+.hero p{color:#e0eadc;font-size:1.06rem;max-width:470px}
+.hero .tag{z-index:1;background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.22);color:#fff;border-radius:999px;backdrop-filter:blur(6px)}
+.nav{gap:8px;margin:22px 0 27px;padding:8px;background:#e9e9dc;border:1px solid #e0e1d4;border-radius:16px}
+.nav button{border-radius:10px;padding:11px 16px}
+.nav button.active{background:#244b38;box-shadow:0 4px 12px rgba(36,75,56,.18)}
+.stats{gap:16px;margin:22px 0}
+.stat,.panel,.item{border-color:#e6e5d9;box-shadow:0 8px 25px rgba(39,57,40,.045)}
+.stat{min-height:150px;padding:24px;border-radius:20px}
+.stat:before{top:24px;bottom:24px;width:4px;border-radius:0 5px 5px 0;background:#8fae83}
+.stat strong{font-size:2.55rem;margin:13px 0 6px}
+.panel{padding:28px;border-radius:20px;margin:18px 0}
+.panel h2{font-size:1.3rem;margin-bottom:19px}
+.field input,.field select,.field textarea,.toolbar input,.toolbar select{border-radius:12px;min-height:48px}
+button{border-radius:12px}
+.primary{background:#244b38;box-shadow:0 3px 0 rgba(20,48,31,.08)}
+.secondary{background:#f0f1e8;border-color:#e1e5d9}
+.items{gap:16px}
+.item{border-radius:17px;padding:22px}
+.item:hover{box-shadow:0 10px 25px rgba(39,57,40,.07);transform:translateY(-3px)}
+.item .tag{border-radius:999px}
+.badge{border-radius:999px;padding:6px 11px}
+.hint{border-radius:15px;background:#edf1e6;border-color:#e0e7d8}
+.empty{border-radius:16px}
+.footer{padding-top:32px}
+@media(max-width:760px){
+ .wrap{padding:14px}
+ .hero{min-height:0;padding:29px 23px;border-radius:21px}
+ .hero h1{font-size:2.35rem}
+ .hero:after{right:-140px;top:-140px}
+ .nav{padding:6px;border-radius:14px}
+ .nav button{border-radius:9px}
+ .stats{gap:10px}
+ .stat{min-height:130px;padding:16px;border-radius:16px}
+ .stat strong{font-size:2rem}
+ .panel{padding:19px;border-radius:17px}
+ .item{padding:17px;border-radius:15px}
+}
+
 </style></head>
 <body><main class="wrap">
 <header class="hero"><div><h1>🥬 Smart Pantry</h1><p>รู้ก่อนหมด ใช้ให้ทัน ลดอาหารเหลือทิ้ง</p></div><span class="tag">✨ จัดการครัวอย่างชาญฉลาด</span></header>
