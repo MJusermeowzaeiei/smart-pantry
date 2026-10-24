@@ -378,7 +378,7 @@ body{
  background:var(--sand);border:1px solid var(--ledger-line);border-top:5px solid var(--chocolate);
  border-radius:2px;box-shadow:5px 5px 0 rgba(74,52,40,.08);
 }
-.nav:before{content:"สารบัญ / INDEX";font:800 .75rem ui-monospace,monospace;letter-spacing:.12em;color:#756455;padding:2px 10px 9px;border-bottom:1px dashed #B9A486;margin-bottom:3px}
+.nav:before{content:"สารบัญ";font:800 .75rem ui-monospace,monospace;letter-spacing:.12em;color:#756455;padding:2px 10px 9px;border-bottom:1px dashed #B9A486;margin-bottom:3px}
 .nav button{
  min-height:48px;text-align:left;border-radius:2px;padding:12px 11px;
  background:transparent;color:var(--chocolate);border:1px solid transparent;
@@ -584,29 +584,90 @@ pre{background:var(--sand);border-radius:2px;color:var(--ink-deep)}
  #dashboard>.stats+.panel+.panel h2{margin:-18px -16px 18px}
 }
 
-</style></head>
+
+/* Final polish: requested typography, navigation label and dashboard hierarchy */
+:root{
+ --paper-cream:#F3EBDD;--sand:#E2D3BA;--ledger-line:#CDBB9C;
+ --chocolate:#4A3428;--ink-deep:#3B2A20;--terracotta:#C4562F;
+ --mustard:#D9A02B;--clay-pink:#D98B73;--moss:#6F7D3C;
+ --dusty-teal:#4F7C82;--mulberry:#7A4A5A;--brick:#B03A2A;
+}
+body{font-family:"IBM Plex Sans Thai","Sarabun",Tahoma,sans-serif;line-height:1.65}
+h1,h2,h3,.hero h1,.panel h2,#dashboard>.stats+.panel+.panel+.hint b{
+ font-family:"Pridi","Noto Serif Thai",serif;
+}
+.stat strong,.badge,.hero:before,.nav:before,.item .meta .tag{
+ font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Consolas,monospace;
+}
+.decorative-emoji{display:none!important}
+.nav:before{content:"สารบัญ";font-family:"IBM Plex Sans Thai",Tahoma,sans-serif;font-size:.72rem;letter-spacing:.16em;font-weight:600}
+#dashboard>.stats+.panel{grid-column:1/-1;grid-row:3;margin:0 0 15px;padding:10px 16px;background:#E2D3BA;border:1px dashed #B9A486;box-shadow:none;transform:none}
+#dashboard>.stats+.panel h2{margin:-10px -16px 8px;padding:7px 12px;background:#E2D3BA;border-left:4px solid var(--dusty-teal);color:var(--chocolate);font-size:.96rem}
+#dashboard>.stats+.panel p{margin:5px 0;font-size:.88rem}
+#dashboard>.stats+.panel .actions{margin:7px 0;gap:7px}
+#dashboard>.stats+.panel .actions button{min-height:44px;padding:8px 12px}
+#dashboard>.stats+.panel #notification-summary{padding:8px 11px;line-height:1.5}
+#dashboard>.stats+.panel+.panel{grid-column:1/-1;grid-row:2;margin:0 0 17px;padding:24px;background:var(--chocolate);color:var(--paper-cream);border:0;border-left:9px solid var(--terracotta);box-shadow:7px 7px 0 var(--mustard);transform:rotate(-.25deg)}
+#dashboard>.stats+.panel+.panel h2{margin:-24px -24px 18px;padding:14px 18px;background:var(--terracotta);border-left:7px solid var(--mustard);color:#FFF9EE;font-size:1.3rem}
+#dashboard>.stats+.panel+.panel .item{color:var(--paper-cream);border-bottom-color:#766154}
+#dashboard>.stats+.panel+.panel .item h3{color:var(--paper-cream)}
+#dashboard>.stats+.panel+.panel .item .muted{color:var(--sand)}
+#dashboard>.stats+.panel+.panel .item .tag{color:var(--sand);border-color:#766154}
+#dashboard>.stats+.panel+.panel .life-meter{background:#766154}
+#dashboard>.stats+.panel+.panel .item:hover{background:#5B4538}
+#dashboard>.stats+.panel+.panel .badge{color:var(--ink-deep)}
+#dashboard>.stats+.panel+.panel+.hint{grid-column:1/-1;grid-row:4;margin:0;background:var(--dusty-teal);border:0;border-radius:2px;color:#FFF9EE;padding:19px 22px;box-shadow:5px 5px 0 var(--sand)}
+#dashboard>.stats+.panel+.panel+.hint b{font-size:1.12rem}
+.stat:nth-child(1){background:var(--mustard)}
+.stat:nth-child(2){background:var(--clay-pink)}
+.stat:nth-child(3){background:var(--moss)}
+.stat:nth-child(4){background:var(--dusty-teal)}
+.stat:nth-child(1) .label,.stat:nth-child(1) strong,.stat:nth-child(1) small,
+.stat:nth-child(2) .label,.stat:nth-child(2) strong,.stat:nth-child(2) small{color:var(--ink-deep);opacity:1}
+.stat:nth-child(3) .label,.stat:nth-child(3) strong,.stat:nth-child(3) small,
+.stat:nth-child(4) .label,.stat:nth-child(4) strong,.stat:nth-child(4) small{color:#FFF9EE;opacity:1}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #8A5A14;outline-offset:3px}
+@media(max-width:700px){
+ .wrap{padding-bottom:calc(108px + env(safe-area-inset-bottom))}
+ #dashboard{display:flex;flex-direction:column}
+ #dashboard>.stats{order:1}
+ #dashboard>.stats+.panel+.panel{order:2;width:100%;margin:0 0 14px;padding:18px 16px;transform:none}
+ #dashboard>.stats+.panel+.panel h2{margin:-18px -16px 17px;padding:11px 13px}
+ #dashboard>.stats+.panel{order:3;width:100%;margin:0 0 12px;padding:10px 12px}
+ #dashboard>.stats+.panel h2{margin:-10px -12px 8px;padding:7px 10px}
+ #dashboard>.stats+.panel+.panel+.hint{order:4;width:100%;margin:0 0 14px}
+ .stat{transform:none!important}
+}
+@media(prefers-reduced-motion:reduce){
+ *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+
+</style><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Pridi:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
 <body><main class="wrap">
-<header class="hero"><div><h1>🥬 Smart Pantry</h1><p>รู้ก่อนหมด ใช้ให้ทัน ลดอาหารเหลือทิ้ง</p></div><span class="tag">✨ จัดการครัวอย่างชาญฉลาด</span></header>
+<header class="hero"><div><h1><span class="decorative-emoji" aria-hidden="true">🥬</span> Smart Pantry</h1><p>รู้ก่อนหมด ใช้ให้ทัน ลดอาหารเหลือทิ้ง</p></div><span class="tag"><span class="decorative-emoji" aria-hidden="true">✨</span> จัดการครัวอย่างชาญฉลาด</span></header>
 <nav class="nav" aria-label="เมนูหลัก"><button class="active" data-page="dashboard">ภาพรวม</button><button data-page="add">＋ เพิ่มวัตถุดิบ</button><button data-page="inventory">คลังวัตถุดิบ</button><button data-page="urgent">ควรใช้ก่อน</button><button data-page="about">เกี่ยวกับโครงงาน</button></nav>
 <section id="dashboard" class="page">
 <div class="stats"><div class="stat"><span class="label">วัตถุดิบทั้งหมด</span><strong id="stat-total">0</strong><small>รายการในคลัง</small></div><div class="stat"><span class="label">ใกล้หมดอายุ</span><strong id="stat-soon">0</strong><small>ภายใน 3 วัน</small></div><div class="stat"><span class="label">หมดอายุแล้ว</span><strong id="stat-expired">0</strong><small>ควรตรวจสอบ</small></div><div class="stat"><span class="label">ยังใช้ได้</span><strong id="stat-good">0</strong><small>เหลือมากกว่า 3 วัน</small></div></div>
-<div class="panel"><h2>🔔 การแจ้งเตือนวันหมดอายุ</h2><p class="muted">รับ Web Push แจ้งเตือนวันหมดอายุได้แม้ปิดเว็บ เมื่อเพิ่ม Smart Pantry ไปยังหน้าจอโฮมบน iPhone และตั้งค่าระบบแจ้งเตือนสำเร็จ</p><div id="notification-summary" class="hint" role="status">กำลังตรวจสอบสถานะวัตถุดิบ…</div><div class="actions"><button class="primary" type="button" id="enable-notifications">เปิดการแจ้งเตือนบนอุปกรณ์</button><button class="secondary" type="button" id="test-notification">ทดสอบการแจ้งเตือน</button></div><p class="muted" id="notification-help">ต้องเปิดจากไอคอน Smart Pantry บนหน้าจอโฮมของ iPhone และตั้งค่าเซิร์ฟเวอร์แจ้งเตือนก่อน ระบบจะตรวจวันหมดอายุอัตโนมัติทุกวัน</p></div><div class="panel"><h2>⏳ รายการที่ควรตรวจสอบก่อน</h2><div id="dashboard-urgent"></div></div><div class="hint"><b>ระบบทำงานอย่างไร?</b><br>1. บันทึกวัตถุดิบและวันหมดอายุ &nbsp; 2. คำนวณจำนวนวันคงเหลือ &nbsp; 3. เรียงรายการที่ควรใช้ก่อนขึ้นมาแสดง</div>
+<div class="panel"><h2><span class="decorative-emoji" aria-hidden="true">🔔</span> การแจ้งเตือนวันหมดอายุ</h2><p class="muted">รับ Web Push แจ้งเตือนวันหมดอายุได้แม้ปิดเว็บ เมื่อเพิ่ม Smart Pantry ไปยังหน้าจอโฮมบน iPhone และตั้งค่าระบบแจ้งเตือนสำเร็จ</p><div id="notification-summary" class="hint" role="status">กำลังตรวจสอบสถานะวัตถุดิบ…</div><div class="actions"><button class="primary" type="button" id="enable-notifications">เปิดการแจ้งเตือนบนอุปกรณ์</button><button class="secondary" type="button" id="test-notification">ทดสอบการแจ้งเตือน</button></div><p class="muted" id="notification-help">ต้องเปิดจากไอคอน Smart Pantry บนหน้าจอโฮมของ iPhone และตั้งค่าเซิร์ฟเวอร์แจ้งเตือนก่อน ระบบจะตรวจวันหมดอายุอัตโนมัติทุกวัน</p></div><div class="panel"><h2><span class="decorative-emoji" aria-hidden="true">⏳</span> รายการที่ควรตรวจสอบก่อน</h2><div id="dashboard-urgent"></div></div><div class="hint"><b>ระบบทำงานอย่างไร?</b><br>1. บันทึกวัตถุดิบและวันหมดอายุ &nbsp; 2. คำนวณจำนวนวันคงเหลือ &nbsp; 3. เรียงรายการที่ควรใช้ก่อนขึ้นมาแสดง</div>
 </section>
-<section id="add" class="page hidden"><div class="panel"><h2 id="form-title">➕ เพิ่มวัตถุดิบใหม่</h2><form id="item-form"><input type="hidden" id="edit-id"><div class="formgrid">
+<section id="add" class="page hidden"><div class="panel"><h2 id="form-title"><span class="decorative-emoji" aria-hidden="true">➕</span> เพิ่มวัตถุดิบใหม่</h2><form id="item-form"><input type="hidden" id="edit-id"><div class="formgrid">
 <div class="field"><label for="name">ชื่อวัตถุดิบ *</label><input id="name" required maxlength="100" placeholder="เช่น นมสด"></div>
 <div class="field"><label for="category">หมวดหมู่</label><select id="category"><option>ผักและผลไม้</option><option>เนื้อสัตว์/อาหารทะเล</option><option>นมและไข่</option><option>ของแห้ง</option><option>เครื่องปรุง</option><option>อาหารสำเร็จรูป</option><option>เครื่องดื่ม</option><option>อื่น ๆ</option></select></div>
 <div class="field"><label for="quantity">จำนวน *</label><input id="quantity" type="number" min="0.01" step="any" value="1" required></div>
 <div class="field"><label for="unit">หน่วย</label><select id="unit"><option>ชิ้น</option><option>ขวด</option><option>กล่อง</option><option>ถุง</option><option>แพ็ก</option><option>กิโลกรัม</option><option>กรัม</option><option>ลิตร</option><option>มิลลิลิตร</option><option>ฟอง</option><option>กระป๋อง</option><option>อื่น ๆ</option></select></div>
 <div class="field"><label for="expiry">วันหมดอายุ *</label><input id="expiry" type="date" required></div>
 <div class="field"><label for="note">หมายเหตุ (ไม่บังคับ)</label><input id="note" maxlength="250" placeholder="เช่น เปิดใช้แล้ว"></div></div><div class="actions"><button class="primary" type="submit" id="save-button">บันทึกวัตถุดิบ</button><button class="secondary" type="button" id="cancel-edit">ล้างฟอร์ม</button></div></form></div></section>
-<section id="inventory" class="page hidden"><div class="panel"><h2>📦 คลังวัตถุดิบ</h2><div class="toolbar"><input id="search" placeholder="ค้นหาชื่อวัตถุดิบ…"><select id="filter-category"><option value="">ทุกหมวดหมู่</option><option>ผักและผลไม้</option><option>เนื้อสัตว์/อาหารทะเล</option><option>นมและไข่</option><option>ของแห้ง</option><option>เครื่องปรุง</option><option>อาหารสำเร็จรูป</option><option>เครื่องดื่ม</option><option>อื่น ๆ</option></select><select id="sort"><option value="expiry">วันหมดอายุใกล้ที่สุด</option><option value="expiry-desc">วันหมดอายุไกลที่สุด</option><option value="name">ชื่อ ก–ฮ</option><option value="quantity">จำนวนมากไปน้อย</option></select></div><div class="actions" style="margin:0 0 16px">
+<section id="inventory" class="page hidden"><div class="panel"><h2><span class="decorative-emoji" aria-hidden="true">📦</span> คลังวัตถุดิบ</h2><div class="toolbar"><input id="search" placeholder="ค้นหาชื่อวัตถุดิบ…"><select id="filter-category"><option value="">ทุกหมวดหมู่</option><option>ผักและผลไม้</option><option>เนื้อสัตว์/อาหารทะเล</option><option>นมและไข่</option><option>ของแห้ง</option><option>เครื่องปรุง</option><option>อาหารสำเร็จรูป</option><option>เครื่องดื่ม</option><option>อื่น ๆ</option></select><select id="sort"><option value="expiry">วันหมดอายุใกล้ที่สุด</option><option value="expiry-desc">วันหมดอายุไกลที่สุด</option><option value="name">ชื่อ ก–ฮ</option><option value="quantity">จำนวนมากไปน้อย</option></select></div><div class="actions" style="margin:0 0 16px">
 <button class="secondary" type="button" id="export-data">ส่งออกข้อมูลสำรอง</button>
 <button class="secondary" type="button" id="import-data-button">นำเข้าข้อมูลสำรอง</button>
 <button class="danger" type="button" id="clear-all">ล้างคลังทั้งหมด</button>
 <input id="import-data-file" type="file" accept="application/json,.json" hidden>
 </div><p class="muted">ควรส่งออกข้อมูลสำรองก่อนเปลี่ยนอุปกรณ์หรือล้างข้อมูลเว็บไซต์</p><div id="inventory-list"></div></div></section>
-<section id="urgent" class="page hidden"><div class="panel"><h2>🚨 ควรใช้ก่อน</h2><p class="muted">รายการที่หมดอายุแล้วหรือจะหมดอายุภายใน 3 วัน</p><div id="urgent-list"></div></div></section>
-<section id="about" class="page hidden"><div class="panel"><h2>🎓 เกี่ยวกับโครงงาน</h2><p>Smart Pantry เป็นเว็บแอปสำหรับจัดการวัตถุดิบในบ้านและช่วยวางแผนใช้ก่อนหมดอายุ ข้อมูลจะเก็บไว้ในเบราว์เซอร์ของอุปกรณ์นี้</p><h3>แนวคิดวิยุตคณิตและอัลกอริทึม</h3><ul><li><b>เซต:</b> คลังวัตถุดิบคือเซตของระเบียนข้อมูลแต่ละรายการ</li><li><b>ตรรกศาสตร์:</b> ใช้เงื่อนไขแยกสถานะตามจำนวนวันคงเหลือ</li><li><b>ฟังก์ชัน:</b> daysLeft(x) = วันหมดอายุ(x) − วันที่ปัจจุบัน</li><li><b>การเรียงลำดับ:</b> เรียงวันหมดอายุจากน้อยไปมาก เพื่อแนะนำสิ่งที่ควรใช้ก่อน</li><li><b>การค้นหา:</b> กรองตามชื่อและหมวดหมู่</li></ul><pre>ถ้าวันคงเหลือ &lt; 0   → หมดอายุแล้ว
+<section id="urgent" class="page hidden"><div class="panel"><h2><span class="decorative-emoji" aria-hidden="true">🚨</span> ควรใช้ก่อน</h2><p class="muted">รายการที่หมดอายุแล้วหรือจะหมดอายุภายใน 3 วัน</p><div id="urgent-list"></div></div></section>
+<section id="about" class="page hidden"><div class="panel"><h2><span class="decorative-emoji" aria-hidden="true">🎓</span> เกี่ยวกับโครงงาน</h2><p>Smart Pantry เป็นเว็บแอปสำหรับจัดการวัตถุดิบในบ้านและช่วยวางแผนใช้ก่อนหมดอายุ ข้อมูลจะเก็บไว้ในเบราว์เซอร์ของอุปกรณ์นี้</p><h3>แนวคิดวิยุตคณิตและอัลกอริทึม</h3><ul><li><b>เซต:</b> คลังวัตถุดิบคือเซตของระเบียนข้อมูลแต่ละรายการ</li><li><b>ตรรกศาสตร์:</b> ใช้เงื่อนไขแยกสถานะตามจำนวนวันคงเหลือ</li><li><b>ฟังก์ชัน:</b> daysLeft(x) = วันหมดอายุ(x) − วันที่ปัจจุบัน</li><li><b>การเรียงลำดับ:</b> เรียงวันหมดอายุจากน้อยไปมาก เพื่อแนะนำสิ่งที่ควรใช้ก่อน</li><li><b>การค้นหา:</b> กรองตามชื่อและหมวดหมู่</li></ul><pre>ถ้าวันคงเหลือ &lt; 0   → หมดอายุแล้ว
 ถ้าวันคงเหลือ ≤ 3   → ใกล้หมดอายุ
 กรณีอื่น              → ยังใช้ได้</pre><div class="hint">ข้อจำกัด: เว็บนี้ช่วยติดตามวันที่ผู้ใช้กรอก ไม่สามารถยืนยันความปลอดภัยของอาหารหรือวันหมดอายุจากผู้ผลิตได้ ข้อมูลจัดเก็บในเบราว์เซอร์เครื่องนี้เท่านั้น</div></div></section>
 <footer class="footer">Smart Pantry · โครงงานวิยุตคณิตและอัลกอริทึม · บันทึกข้อมูลในเครื่องนี้อัตโนมัติ</footer></main><div id="toast" class="toast hidden" role="status"></div>
